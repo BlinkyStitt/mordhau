@@ -1,5 +1,7 @@
 #!/usr/bin/with-contenv bash
 
+export HOME=/home/steam
+
 #echo "Updating Mordhao Server..."
 #exec s6-setuidgid steam /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhao.txt
 
