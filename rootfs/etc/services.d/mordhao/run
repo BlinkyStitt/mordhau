@@ -1,2 +1,2 @@
 #!/usr/bin/execlineb -P
-tail -f /dev/null
+/mnt/steam/mordhau/MordhauServer.sh

@@ -43,12 +43,15 @@ RUN docker-install \
     libxrandr2 \
 ;
 
+# mordhao install script
+COPY --chown=steam:steam update_mordhao.txt /home/steam/
+
+# install mordhao
+RUN su steam -c "/home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhao.txt"
+
 COPY /rootfs /
 
-# mordhao
-USER steam
-RUN /home/steam/steamcmd/steamcmd.sh +runscript /etc/update_mordhao.txt
-USER root
-
-# save the volume now that the game has been installed
-VOLUME /mnt/steam
+# keep game configs last since they will change most often
+# TODO: generate these from consul
+# mordhao server config
+COPY mordhao.ini /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/Game.ini
