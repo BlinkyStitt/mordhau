@@ -54,11 +54,6 @@ COPY /rootfs /
 # keep game configs last since they will change most often
 # TODO: generate these from consul
 # mordhao server config
-# TODO: why did copying it directly into LinuxServer delete all the other configs?!
+# do NOT put it into /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/ since the defaults dont exist there yet
 # TODO: copy from a volume instead so we can quickly iterate?
 COPY --chown=steam:steam mordhao.ini /home/steam/
-RUN { set -eux; \
-    \
-    ls -la /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/; \
-    cp /home/steam/mordhao.ini /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/Game.ini; \
-}
