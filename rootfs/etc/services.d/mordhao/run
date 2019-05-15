@@ -8,5 +8,8 @@ export HOME=/home/steam
 echo "Starting Mordhao Server..."
 exec s6-setuidgid steam \
     /mnt/steam/mordhau/MordhauServer.sh \
+    -Port=7777 \
+    -QueryPort=27015 \
+    -Beaconport=15000 \
     -GAMEINI=/home/steam/mordhao.ini \
 ;
