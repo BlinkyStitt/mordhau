@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 
-echo "Updating Mordhao Server..."
-exec s6-setuidgid steam /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhao.txt
+#echo "Updating Mordhao Server..."
+#exec s6-setuidgid steam /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhao.txt
 
 echo "Starting Mordhao Server..."
 exec s6-setuidgid steam /mnt/steam/mordhau/MordhauServer.sh
