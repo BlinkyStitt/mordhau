@@ -1,0 +1,3 @@
+#!/usr/bin/execlineb -S0
+# bring the container down
+s6-svscanctl -t /var/run/s6/services

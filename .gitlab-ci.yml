@@ -1,0 +1,29 @@
+image: gitlab-registry.stytt.com/docker/docker-builder:latest
+
+stages:
+- build
+- test
+- release
+- triggers
+
+.gitlab_login: &gitlab_login  # Hidden key that defines an anchor named 'gitlab_login'
+  before_script:
+    - printenv "CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin "$CI_REGISTRY"
+  after_script:
+    - docker logout "$CI_REGISTRY"
+
+# since there is just the one test script, combine test and build jobs
+build:
+  <<: *gitlab_login           # Merge the contents of the 'gitlab_login' alias
+  stage: build
+  script:
+    - build.sh
+
+release:
+  <<: *gitlab_login           # Merge the contents of the 'gitlab_login' alias
+  stage: release
+  only:
+    - master
+  script:
+    - release.sh
+    # TODO: push to docker hub
