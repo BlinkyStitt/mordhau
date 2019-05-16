@@ -32,6 +32,7 @@ RUN docker-install \
     libatk1.0-0 \
     libxrandr2 \
     qstat \
+    xdg-user-dirs \
 ;
 
 # install steamcmd
