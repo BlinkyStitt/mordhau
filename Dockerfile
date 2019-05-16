@@ -49,22 +49,21 @@ RUN { set -eux; \
     # steamcmd.sh +quit; \
 }
 
-# mordhao install script
-COPY --chown=steam:steam update_mordhao.txt /home/steam/
+# mordhau install script
+COPY --chown=steam:steam update_mordhau.txt /home/steam/
 
-# install mordhao
-RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhao.txt
-
-# keep game configs last since they will change most often
-# TODO: generate these from consul
-# mordhao server config
-# do NOT put it into /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/ since the defaults dont exist there yet
-# TODO: copy from a volume instead so we can quickly iterate?
-COPY --chown=steam:steam mordhao.ini /home/steam/
+# install mordhau
+RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
 CMD MordhauServer.sh \
     -Port=7777 \
     -QueryPort=27015 \
     -Beaconport=15000 \
-    -GAMEINI=/home/steam/mordhao.ini \
 ;
+
+# keep game configs last since they will change most often
+# TODO: generate these from consul
+# mordhau server config
+# do NOT put it into /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/ since the defaults dont exist there yet
+# TODO: copy from a volume instead so we can quickly iterate?
+COPY --chown=steam:steam mordhau.ini /home/steam/
