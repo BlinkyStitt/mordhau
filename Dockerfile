@@ -2,6 +2,7 @@ FROM gitlab-registry.stytt.com/docker/ubuntu
 
 RUN useradd -m steam
 
+# steamcmd deps
 RUN { set -eux; \
     \
     docker-install \
@@ -30,6 +31,7 @@ RUN docker-install \
     libxtst6 \
     libatk1.0-0 \
     libxrandr2 \
+    qstat \
 ;
 
 # install steamcmd
