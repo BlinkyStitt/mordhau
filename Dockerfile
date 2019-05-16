@@ -59,6 +59,7 @@ CMD MordhauServer.sh \
     -Port=7777 \
     -QueryPort=27015 \
     -Beaconport=15000 \
+    -GAMEINI=/home/steam/mordhau.ini \
 ;
 
 # keep game configs last since they will change most often
