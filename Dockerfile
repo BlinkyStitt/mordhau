@@ -1,10 +1,10 @@
-FROM gitlab-registry.stytt.com/docker/linux-s6/ubuntu
+FROM gitlab-registry.stytt.com/docker/ubuntu
 
 RUN useradd -m steam
 
 RUN { set -eux; \
     \
-        docker-install \
+    docker-install \
         ca-certificates \
         curl \
         lib32gcc1 \
@@ -13,17 +13,6 @@ RUN { set -eux; \
     ; \
     echo en_US.UTF-8 UTF-8 >> /etc/locale.gen; \
     locale-gen; \
-}
-
-# TODO: run this as steam
-# TODO: checksum
-RUN { set -eux; \
-    \
-    mkdir -p /mnt/steam /home/steam/steamcmd; \
-    cd /home/steam/steamcmd; \
-    curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
-    chown -R steam:steam /home/steam/steamcmd /mnt/steam; \
-    su steam -c "./steamcmd.sh +quit"; \
 }
 
 # mordhao deps
@@ -43,13 +32,25 @@ RUN docker-install \
     libxrandr2 \
 ;
 
+# install steamcmd
+# TODO: checksum
+ENV HOME /home/steam
+ENV PATH $PATH:/home/steam/steamcmd:/home/steam/mordhau
+USER steam
+RUN { set -eux; \
+    \
+    mkdir -p /home/steam/steamcmd; \
+    cd /home/steam/steamcmd; \
+    curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
+    # cd /home/steam; \
+    # steamcmd.sh +quit; \
+}
+
 # mordhao install script
 COPY --chown=steam:steam update_mordhao.txt /home/steam/
 
 # install mordhao
-RUN su steam -c "/home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhao.txt"
-
-COPY /rootfs /
+RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhao.txt
 
 # keep game configs last since they will change most often
 # TODO: generate these from consul
@@ -57,3 +58,10 @@ COPY /rootfs /
 # do NOT put it into /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/ since the defaults dont exist there yet
 # TODO: copy from a volume instead so we can quickly iterate?
 COPY --chown=steam:steam mordhao.ini /home/steam/
+
+CMD MordhauServer.sh \
+    -Port=7777 \
+    -QueryPort=27015 \
+    -Beaconport=15000 \
+    -GAMEINI=/home/steam/mordhao.ini \
+;
