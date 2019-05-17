@@ -55,8 +55,8 @@ COPY --chown=steam:steam update_mordhau.txt /home/steam/
 # install mordhau
 RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
-ENTRYPOINT ["MordhauServer.sh"]
-CMD ["-Port=7777", "-QueryPort=27015", "-Beaconport=15000", "-GAMEINI=/home/steam/mordhau.ini"]
+COPY --chown=steam:steam update_and_run.sh /home/steam/mordhao
+CMD ["update_and_run.sh"]
 
 # keep game configs last since they will change most often
 # TODO: generate these from consul
