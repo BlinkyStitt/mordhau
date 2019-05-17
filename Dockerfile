@@ -55,6 +55,7 @@ COPY --chown=steam:steam update_mordhau.txt /home/steam/
 # install mordhau
 RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
+# TODO: use s6-overlay instead?
 COPY --chown=steam:steam update_and_run.sh /home/steam/mordhao
 CMD ["update_and_run.sh"]
 
