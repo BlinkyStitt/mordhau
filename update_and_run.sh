@@ -1,6 +1,8 @@
 #!/bin/bash
 
-[ "$(whoami)" = "steam" ] || exit 9
+set -e
+
+[ "$(whoami)" = "steam" ]
 
 echo "Updating..."
 /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
