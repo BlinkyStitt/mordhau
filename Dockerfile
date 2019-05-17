@@ -64,4 +64,4 @@ CMD ["update_and_run.sh"]
 # mordhau server config
 # do NOT put it into /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/ since the defaults dont exist there yet
 # TODO: copy from a volume instead so we can quickly iterate?
-COPY --chown=steam:steam mordhau.ini /home/steam/
+COPY --chown=steam:steam *.ini /home/steam/

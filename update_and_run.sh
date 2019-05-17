@@ -11,7 +11,8 @@ echo "Starting..."
 MordhauServer.sh \
     -Port="${PORT:-7777}" \
     -QueryPort="${QUERY_PORT:-27015}" \
-    -Beaconport="${BEACON_PORT:-15000}" \
-    -GAMEINI="${GAME_INI:-/home/steam/mordhau.ini}" \
+    -BeaconPort="${BEACON_PORT:-15000}" \
+    -GAMEINI="${GAME_INI:-/home/steam/mordhau_game.ini}" \
+    -ENGINEINI="${ENGINE_INI:-/home/steam/mordhau_engine.ini}" \
     "$@" \
 ;
