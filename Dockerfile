@@ -56,7 +56,7 @@ COPY --chown=steam:steam update_mordhau.txt /home/steam/
 RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
 # TODO: use s6-overlay instead?
-COPY --chown=steam:steam update_and_run.sh /home/steam/mordhao
+COPY --chown=steam:steam update_and_run.sh /home/steam/mordhau/
 CMD ["update_and_run.sh"]
 
 # keep game configs last since they will change most often
