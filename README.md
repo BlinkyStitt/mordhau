@@ -16,6 +16,8 @@ Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
     # /transcode is my super-fast SSD, but you can use any full path or  docker volume
     docker run --rm -it \
         --network host \
+        -e "SERVER_PASSWORD=1234"
+        -e "ADMIN_PASSWORD=123456"
         -v "/transcode/Steam:/home/steam/Steam" \
         --name mordhau \
         gitlab-registry.stytt.com/docker/mordhau
