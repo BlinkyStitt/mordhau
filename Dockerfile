@@ -1,67 +1,84 @@
-FROM gitlab-registry.stytt.com/docker/ubuntu
+FROM ubuntu:18.04
 
+# create a simple user for steam files
+# TODO: allow custom ID and GID
 RUN useradd -m steam
 
-# steamcmd deps
+# entrypoint for s6-overlay
+# this isn't going to change, so keep it first
+ENTRYPOINT ["/init"]
+CMD []
+
+# s6-overlay
+ENV S6_VERSION=1.22.1.0
+ENV S6_GPGKEY=DB301BA3F6F807E0D0E6CCB86101B2783B2FD161
 RUN { set -eux; \
     \
-    docker-install \
-        ca-certificates \
-        curl \
+    cd /tmp; \
+    apt-get update; \
+    apt-get install -y ca-certificates curl gnupg; \
+    curl -L -o /tmp/s6-overlay-amd64.tar.gz https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-amd64.tar.gz; \
+    curl -L -o /tmp/s6-overlay-amd64.tar.gz.sig https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-amd64.tar.gz.sig; \
+    export GNUPGHOME="$(mktemp -d -p /tmp)"; \
+    curl https://keybase.io/justcontainers/key.asc | gpg --import; \
+    gpg --list-keys "$S6_GPGKEY"; \
+    gpg --batch --verify s6-overlay-amd64.tar.gz.sig s6-overlay-amd64.tar.gz; \
+    tar xzf /tmp/s6-overlay-amd64.tar.gz -C /; \
+    rm -rf /tmp/* /var/lib/apt/lists/*; \
+}
+
+# install dependencies
+RUN { set -eux; \
+    \
+    apt-get update; \
+    apt-get install -y \
+        # steamcmd
         lib32gcc1 \
         readline-common \
         locales \
+        # mordhao
+        libfontconfig1 \
+        libpangocairo-1.0-0 \
+        libnss3 \
+        libgconf2-4 \
+        libxi6 \
+        libxcursor1 \
+        libxss1 \
+        libxcomposite1 \
+        libasound2 \
+        libxdamage1 \
+        libxtst6 \
+        libatk1.0-0 \
+        libxrandr2 \
+        qstat \
+        xdg-user-dirs \
     ; \
     echo en_US.UTF-8 UTF-8 >> /etc/locale.gen; \
     locale-gen; \
+    rm -rf /var/lib/apt/lists/*; \
 }
 
-# mordhao deps
-RUN docker-install \
-    libfontconfig1 \
-    libpangocairo-1.0-0 \
-    libnss3 \
-    libgconf2-4 \
-    libxi6 \
-    libxcursor1 \
-    libxss1 \
-    libxcomposite1 \
-    libasound2 \
-    libxdamage1 \
-    libxtst6 \
-    libatk1.0-0 \
-    libxrandr2 \
-    qstat \
-    xdg-user-dirs \
-;
-
-# install steamcmd and a volume for Steam
+# install steamcmd as the steam user
 # TODO: checksum
-ENV HOME /home/steam
 ENV PATH "$PATH:/home/steam/steamcmd:/home/steam/Steam/steamapps/common/Mordhau Dedicated Server"
 USER steam
-WORKDIR /home/steam
 RUN { set -eux; \
     \
-    mkdir -p steamcmd Steam; \
-    cd steamcmd; \
+    mkdir -p /home/steam/steamcmd; \
+    cd /home/steam/steamcmd; \
     curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
 }
 
+# put the user back to root for s6-overlay
+USER root
+
 # i used to install the game now, but starting the container with /home/steam/Steam as a volume sounds better
-# TODO: we need to make sure directory permissions are correct on start. s6-overlay can do this for us
-VOLUME /home/steam/Steam
 
-# mordhau install script
-COPY --chown=steam:steam update_mordhau.txt /home/steam/
+# s6-overlay things to manage a mordhau server
+COPY rootfs/ /
 
-# TODO: use s6-overlay instead?
-COPY --chown=steam:steam update_and_run.sh /usr/local/bin/
-CMD ["update_and_run.sh"]
-
-# keep game configs last since they will change most often
-# TODO: generate these from consul
 # mordhau server config
+# keep game configs last since they are small and will probably change often
+# TODO: generate these from environment variables on container start instead? might be simpler to just mount from the host
 # do NOT put it into /mnt/steam/mordhau/Mordhau/Saved/Config/LinuxServer/ since the defaults dont exist there yet
-# TODO: copy from a volume instead so we can quickly iterate?
-COPY --chown=steam:steam *.ini /home/steam/
+COPY --chown=steam:steam *.ini /etc/mordhau/

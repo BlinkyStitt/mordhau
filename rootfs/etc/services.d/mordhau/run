@@ -1,0 +1,17 @@
+#!/usr/bin/with-contenv sh
+
+set -e
+
+export HOME=/home/steam
+
+cd "$HOME"
+
+exec s6-setuidgid steam \
+    MordhauServer.sh \
+    -Port="${PORT:-7777}" \
+    -QueryPort="${QUERY_PORT:-27015}" \
+    -BeaconPort="${BEACON_PORT:-15000}" \
+    -GAMEINI="${GAME_INI:-/etc/mordhau/mordhau_game.ini}" \
+    -ENGINEINI="${ENGINE_INI:-/etc/mordhau/mordhau_engine.ini}" \
+    "$@" \
+;

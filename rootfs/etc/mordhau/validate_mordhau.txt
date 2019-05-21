@@ -1,0 +1,5 @@
+@ShutdownOnFailedCommand 1
+@NoPromptForPassword 1
+login anonymous
+app_update 629800 validate
+quit

@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv sh
+
+set -e
+
+export HOME=/home/steam
+
+cd "$HOME"
+
+exec s6-setuidgid steam \
+    steamcmd.sh +runscript /etc/mordhau/update_mordhau.txt
