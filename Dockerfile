@@ -53,6 +53,8 @@ RUN { set -eux; \
 COPY --chown=steam:steam update_mordhau.txt /home/steam/
 
 # install mordhau
+# changing this makes it easy to force a new build 
+ENV FOO 20190520
 RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
 # TODO: use s6-overlay instead?
