@@ -7,8 +7,9 @@ export HOME=/home/steam
 cd "$HOME"
 
 GAME_INI="${GAME_INI:-/etc/mordhau/Game.ini}"
+ENGINE_INI="${ENGINE_INI:-/etc/mordhau/Engine.ini}"
 
-# copy the game ini so that we can replace variables
+# copy the game ini so that we can replace passwords
 cp "$GAME_INI" /tmp/Game.ini
 
 GAME_INI=/tmp/Game.ini
@@ -19,12 +20,16 @@ chmod 600 "$GAME_INI"
 sed -i 's/${{SERVER_PASSWORD}}/'"${SERVER_PASSWORD:-}"'/' "$GAME_INI"
 sed -i 's/${{ADMIN_PASSWORD}}/'"${ADMIN_PASSWORD:-}"'/' "$GAME_INI"
 
-# print the config (but without any passwords)
-grep -v "Password=" "$GAME_INI"
-
 chown steam:steam /tmp/Game.ini
 
-ENGINE_INI="${ENGINE_INI:-/etc/mordhau/Engine.ini}"
+# print the config (but without printing any passwords)
+echo "GAME_INI: $GAME_INI"
+echo
+grep -v "Password=" "$GAME_INI"
+
+echo "ENGINE_INI: $ENGINE_INI"
+echo
+cat "$ENGINE_INI"
 
 exec s6-setuidgid steam \
     MordhauServer.sh \
