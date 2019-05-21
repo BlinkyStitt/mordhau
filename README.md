@@ -1,13 +1,17 @@
 # Mordhau
 
-Quickly run a [Mordhau Server](https://store.steampowered.com/app/629760/MORDHAU/) on your server with Docker.
+Quickly run a [Mordhau Server](https://mordhau.com/) with Docker.
+
+The server is free, but you need to [buy the game](https://store.steampowered.com/app/629760/MORDHAU/) to play.
 
 Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
 
 ## Build
 
+    # HTTP_PROXY is a squid caching proxy
     docker build . \
         --build-arg HTTP_PROXY=http://10.11.12.26:8000 \
+        --build-arg HTTPS_PROXY=http://10.11.12.26:8000 \
         -t gitlab-registry.stytt.com/docker/mordhau:latest
 
 ## Run
@@ -16,10 +20,11 @@ Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
     # /transcode is my super-fast SSD, but you can use any full path or  docker volume
     docker run --rm -it \
         --network host \
-        -e "SERVER_PASSWORD=1234"
-        -e "ADMIN_PASSWORD=123456"
-        -v "/transcode/Steam:/home/steam/Steam" \
+        --env "SERVER_PASSWORD=1234"
+        --env "ADMIN_PASSWORD=123456"
+        --mount type=tmpfs,destination=/tmp \
         --name mordhau \
+        --volume "/transcode/Steam:/home/steam/Steam" \
         gitlab-registry.stytt.com/docker/mordhau
 
     # Instead of "--network host" you can open just the necessary ports

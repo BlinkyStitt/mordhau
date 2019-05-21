@@ -23,14 +23,17 @@ sed -i 's/${{ADMIN_PASSWORD}}/'"${ADMIN_PASSWORD:-}"'/' "$GAME_INI"
 chown steam:steam /tmp/Game.ini
 
 # print the config (but without printing any passwords)
+echo
 echo "GAME_INI: $GAME_INI"
 echo
 grep -v "Password=" "$GAME_INI"
 
+echo
 echo "ENGINE_INI: $ENGINE_INI"
 echo
 cat "$ENGINE_INI"
 
+echo "Starting Mordhau Server..."
 exec s6-setuidgid steam \
     MordhauServer.sh \
     -Port="${PORT:-7777}" \
