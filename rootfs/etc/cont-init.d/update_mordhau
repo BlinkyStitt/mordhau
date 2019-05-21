@@ -6,14 +6,14 @@ export HOME=/home/steam
 
 cd "$HOME"
 
-s6-setuidgid steam mkdir -p Steam
+s6-setuidgid steam mkdir -p Steam steamcmd
 
 # docker volumes sometimes break ownership
 # i was using fix-attrs.d, but we only care about changing ownership
-if [ "$(stat -c '%U' Steam)" != "steam "]; then
+if [ "$(stat -c '%U' Steam)" != "steam" ]; then
     chown -R steam:steam Steam &
 fi
-if [ "$(stat -c '%U' steamcmd)" != "steam "]; then
+if [ "$(stat -c '%U' steamcmd)" != "steam" ]; then
     chown -R steam:steam steamcmd &
 fi
 wait
