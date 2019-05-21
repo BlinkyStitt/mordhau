@@ -38,27 +38,24 @@ RUN docker-install \
 # install steamcmd
 # TODO: checksum
 ENV HOME /home/steam
-ENV PATH $PATH:/home/steam/steamcmd:/home/steam/mordhau
+ENV PATH "$PATH:/home/steam/steamcmd:/home/steam/Steam/steamapps/common/Mordhau Dedicated Server"
 USER steam
+WORKDIR /home/steam
 RUN { set -eux; \
     \
-    mkdir -p /home/steam/steamcmd; \
+    mkdir -p steamcmd Steam; \
     cd /home/steam/steamcmd; \
     curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
-    # cd /home/steam; \
-    # steamcmd.sh +quit; \
 }
+
+# i used to install the game now, but installing on container start sounds better
+VOLUME /home/steam/Steam
 
 # mordhau install script
 COPY --chown=steam:steam update_mordhau.txt /home/steam/
 
-# install mordhau
-# changing this makes it easy to force a new build 
-ENV FOO 20190520
-RUN /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
-
 # TODO: use s6-overlay instead?
-COPY --chown=steam:steam update_and_run.sh /home/steam/mordhau/
+COPY --chown=steam:steam update_and_run.sh /usr/local/bin/
 CMD ["update_and_run.sh"]
 
 # keep game configs last since they will change most often

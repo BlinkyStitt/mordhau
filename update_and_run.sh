@@ -5,7 +5,7 @@ set -e
 [ "$(whoami)" = "steam" ]
 
 echo "Updating..."
-/home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
+steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
 echo "Starting..."
 exec MordhauServer.sh \
