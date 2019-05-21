@@ -49,6 +49,7 @@ RUN { set -eux; \
 }
 
 # i used to install the game now, but installing on container start sounds better
+# TODO: we need to make sure directory permissions are correct on start. s6-overlay will do this for us
 VOLUME /home/steam/Steam
 
 # mordhau install script

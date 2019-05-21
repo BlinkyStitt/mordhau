@@ -4,6 +4,8 @@ set -e
 
 [ "$(whoami)" = "steam" ]
 
+[ -w "/home/steam/Steam" ]
+
 echo "Updating..."
 steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
