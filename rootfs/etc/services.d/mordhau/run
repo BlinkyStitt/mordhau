@@ -1,17 +1,35 @@
 #!/usr/bin/with-contenv sh
 
-set -e
+set -eu
 
 export HOME=/home/steam
 
 cd "$HOME"
+
+GAME_INI="${GAME_INI:-/etc/mordhau/Game.ini}"
+
+# copy the game ini so that we can replace variables
+cp "$GAME_INI" /tmp/Game.ini
+
+GAME_INI=/tmp/Game.ini
+
+chmod 600 "$GAME_INI"
+
+# everything else is safe to include in a config on disk
+sed -i 's/${{SERVER_PASSWORD}}/'"${SERVER_PASSWORD:-}"'/' "$GAME_INI"
+sed -i 's/${{ADMIN_PASSWORD}}/'"${ADMIN_PASSWORD:-}"'/' "$GAME_INI"
+
+# print the config (but without any passwords)
+grep -v "Password=" "$GAME_INI"
+
+ENGINE_INI="${ENGINE_INI:-/etc/mordhau/Engine.ini}"
 
 exec s6-setuidgid steam \
     MordhauServer.sh \
     -Port="${PORT:-7777}" \
     -QueryPort="${QUERY_PORT:-27015}" \
     -BeaconPort="${BEACON_PORT:-15000}" \
-    -GAMEINI="${GAME_INI:-/etc/mordhau/Game.ini}" \
-    -ENGINEINI="${ENGINE_INI:-/etc/mordhau/Engine.ini}" \
+    -GAMEINI="$GAME_INI" \
+    -ENGINEINI="$ENGINE_INI" \
     "$@" \
 ;
