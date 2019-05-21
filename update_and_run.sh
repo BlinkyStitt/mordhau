@@ -8,7 +8,7 @@ echo "Updating..."
 /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/update_mordhau.txt
 
 echo "Starting..."
-MordhauServer.sh \
+exec MordhauServer.sh \
     -Port="${PORT:-7777}" \
     -QueryPort="${QUERY_PORT:-27015}" \
     -BeaconPort="${BEACON_PORT:-15000}" \
