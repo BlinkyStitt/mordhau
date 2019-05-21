@@ -38,13 +38,13 @@ RUN docker-install \
 # install steamcmd
 # TODO: checksum
 ENV HOME /home/steam
-ENV PATH "$PATH:/home/steam/steamcmd:/home/steam/Steam/steamapps/common/Mordhau Dedicated Server"
+ENV PATH "$PATH:/home/steam/Steam/steamcmd:/home/steam/Steam/steamapps/common/Mordhau Dedicated Server"
 USER steam
 WORKDIR /home/steam
 RUN { set -eux; \
     \
-    mkdir -p steamcmd Steam; \
-    cd /home/steam/steamcmd; \
+    mkdir -p Steam/steamcmd; \
+    cd Steam/steamcmd; \
     curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
 }
 
