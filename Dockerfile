@@ -70,7 +70,7 @@ RUN { set -eux; \
 }
 
 # TODO: not sure this will work well if steamcmd updates. you might have to delete the container if it does
-VOLUME /home/steam/steamcmd
+# VOLUME /home/steam/steamcmd
 
 # put the user back to root for s6-overlay
 USER root

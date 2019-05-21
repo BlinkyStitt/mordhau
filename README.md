@@ -45,3 +45,8 @@ Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
 ## TODO
 
 * Put steamcmd stuff in a volume so the container saves updates
+* I had an update fail because I forgot to set --storage-opt, but the server still started
+
+    mordhau_1              | [cont-init.d] update_mordhau: exited 254.
+    mordhau_1              | [cont-init.d] done.
+    mordhau_1              | [services.d] starting services
