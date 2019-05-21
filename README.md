@@ -27,6 +27,9 @@ Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
         -p 15000:15000/udp \
         -p 27015:27015/udp \
 
+    # On a host with ZFS and drives larger than 2TB, steamcmd has a bug. Workaround by setting a  size for the container storage to something less than 2TB but larger than the size of the game with some overhead.
+        --storage-opt size=10G
+
 ## Status
 
     docker run --rm -it \

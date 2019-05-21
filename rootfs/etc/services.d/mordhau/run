@@ -22,6 +22,8 @@ sed -i 's/${{ADMIN_PASSWORD}}/'"${ADMIN_PASSWORD:-}"'/' "$GAME_INI"
 # print the config (but without any passwords)
 grep -v "Password=" "$GAME_INI"
 
+chown steam:steam /tmp/Game.ini
+
 ENGINE_INI="${ENGINE_INI:-/etc/mordhau/Engine.ini}"
 
 exec s6-setuidgid steam \
