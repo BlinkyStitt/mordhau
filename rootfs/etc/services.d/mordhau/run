@@ -11,7 +11,7 @@ exec s6-setuidgid steam \
     -Port="${PORT:-7777}" \
     -QueryPort="${QUERY_PORT:-27015}" \
     -BeaconPort="${BEACON_PORT:-15000}" \
-    -GAMEINI="${GAME_INI:-/etc/mordhau/mordhau_game.ini}" \
-    -ENGINEINI="${ENGINE_INI:-/etc/mordhau/mordhau_engine.ini}" \
+    -GAMEINI="${GAME_INI:-/etc/mordhau/Game.ini}" \
+    -ENGINEINI="${ENGINE_INI:-/etc/mordhau/Engine.ini}" \
     "$@" \
 ;
