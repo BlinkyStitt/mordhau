@@ -69,6 +69,9 @@ RUN { set -eux; \
     curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
 }
 
+# TODO: not sure this will work well if steamcmd updates. you might have to delete the container if it does
+VOLUME /home/steam/steamcmd
+
 # put the user back to root for s6-overlay
 USER root
 
