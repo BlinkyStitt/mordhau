@@ -25,6 +25,7 @@ Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
         --mount type=tmpfs,destination=/tmp \
         --name mordhau \
         --volume "/transcode/Steam:/home/steam/Steam" \
+        --volume "/transcode/steamcmd:/home/steam/steamcmd" \
         gitlab-registry.stytt.com/docker/mordhau
 
     # Instead of "--network host" you can open just the necessary ports
@@ -45,7 +46,7 @@ Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
 ## TODO
 
 * Put steamcmd stuff in a volume so the container saves updates
-* I had an update fail because I forgot to set --storage-opt, but the server still started
+* I had an update fail because I forgot to set --storage-opt, but the server still started. I think using "exec" for the ginal command was causing this
 
     mordhau_1              | [cont-init.d] update_mordhau: exited 254.
     mordhau_1              | [cont-init.d] done.

@@ -10,6 +10,7 @@ GAME_INI="${GAME_INI:-/etc/mordhau/Game.ini}"
 ENGINE_INI="${ENGINE_INI:-/etc/mordhau/Engine.ini}"
 
 # copy the game ini so that we can replace passwords
+# tmp should be a tmpfs so this won't touch disk
 cp "$GAME_INI" /tmp/Game.ini
 
 GAME_INI=/tmp/Game.ini

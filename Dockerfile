@@ -60,17 +60,16 @@ RUN { set -eux; \
 
 # install steamcmd as the steam user
 # TODO: checksum
+# TODO: install into /opt/ instead. then we can copy it into a volume for the steam user if it doesn't exist and run it
 ENV PATH "$PATH:/home/steam/steamcmd:/home/steam/Steam/steamapps/common/Mordhau Dedicated Server"
-USER steam
 RUN { set -eux; \
     \
-    mkdir -p /home/steam/steamcmd; \
-    cd /home/steam/steamcmd; \
+    mkdir -p /opt/steamcmd; \
+    cd /opt/steamcmd; \
     curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
 }
 
-# TODO: not sure this will work well if steamcmd updates. you might have to delete the container if it does
-# VOLUME /home/steam/steamcmd
+VOLUME /home/steam/steamcmd
 
 # put the user back to root for s6-overlay
 USER root

@@ -6,5 +6,29 @@ export HOME=/home/steam
 
 cd "$HOME"
 
-exec s6-setuidgid steam \
+# docker volumes sometimes break ownership
+# i was using fix-attrs.d, but we only care about changing ownership
+if [ "$(stat -c '%U' "$HOME/Steam")" != "steam "]; then
+    chown -R steam:steam "$HOME/Steam" &
+fi
+
+if [ -e "$HOME/steamcmd/steamcmd.sh" ]; then
+    # TODO: check if modified date matches /opt/steamcmd and upgrade if not
+
+    # docker volumes sometimes break ownership
+    if [ "$(stat -c '%U' "$HOME/steamcmd")" != "steam "]; then
+        chown -R steam:steam "$HOME/steamcmd" &
+    fi
+else
+    # TODO: rsync? 
+    # copy from /opt/ since it stores a bunch of packages and caches next to it and we want a docker volume to save those
+    s6-setuidgid steam cp -r /opt/steamcmd/* "$HOME/steamcmd/"
+fi
+wait
+
+# $HOME/steamcmd is already on the path
+
+# TODO: option to run validate_mordhau.txt instead
+
+s6-setuidgid steam \
     steamcmd.sh +runscript /etc/mordhau/update_mordhau.txt
