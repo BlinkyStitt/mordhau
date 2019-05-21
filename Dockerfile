@@ -35,21 +35,21 @@ RUN docker-install \
     xdg-user-dirs \
 ;
 
-# install steamcmd
+# install steamcmd and a volume for Steam
 # TODO: checksum
 ENV HOME /home/steam
-ENV PATH "$PATH:/home/steam/Steam/steamcmd:/home/steam/Steam/steamapps/common/Mordhau Dedicated Server"
+ENV PATH "$PATH:/home/steam/steamcmd:/home/steam/Steam/steamapps/common/Mordhau Dedicated Server"
 USER steam
 WORKDIR /home/steam
 RUN { set -eux; \
     \
-    mkdir -p Steam/steamcmd; \
-    cd Steam/steamcmd; \
+    mkdir -p steamcmd Steam; \
+    cd steamcmd; \
     curl -fSL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -; \
 }
 
-# i used to install the game now, but installing on container start sounds better
-# TODO: we need to make sure directory permissions are correct on start. s6-overlay will do this for us
+# i used to install the game now, but starting the container with /home/steam/Steam as a volume sounds better
+# TODO: we need to make sure directory permissions are correct on start. s6-overlay can do this for us
 VOLUME /home/steam/Steam
 
 # mordhau install script
