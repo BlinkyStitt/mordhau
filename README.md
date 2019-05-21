@@ -6,7 +6,7 @@ The server is free, but you need to [buy the game](https://store.steampowered.co
 
 Be sure to open UDP ports 7777, 15000, and 27015 on your firewall.
 
-This isn't yet working for me. Quakestat shows the server as running, but the client won't connect. I asked for help [on Reddit](https://www.reddit.com/r/Mordhau/comments/bpk8rz/dedicated_server_running_but_i_cant_connect/)
+This isn't yet working for me. Quakestat shows the server as running, but the client won't connect. I asked for help [on Reddit](https://www.reddit.com/r/Mordhau/comments/bpk8rz/dedicated_server_running_but_i_cant_connect/).
 
 ## Build
 
