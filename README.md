@@ -18,7 +18,7 @@ This isn't yet working for me. Quakestat shows the server as running, but the cl
 
 ## Run
 
-    # /transcode is my super-fast SSD, but you can use any full path or  docker volume
+    # /transcode is my super-fast SSD, but you can use any full path or docker volume
     docker run --rm -it \
         --network host \
         --env "SERVER_PASSWORD=1234"
@@ -37,16 +37,16 @@ Instead of "--network host" you can open just the necessary ports, but it might 
 
 On a host with ZFS and drives larger than 2TB, steamcmd has a bug. Workaround by setting a  size for the container storage to something less than 2TB but larger than the size of the game with some overhead.
 
-    --storage-opt size=10G
-        
+    --storage-opt size=10G \
+
 If you want to do something more complex with the configs, simply mount one or both of them
 
-    --volume "/path/to/mordhau/Game.ini:/etc/mordhau/Game.ini"
-    --volume "/path/to/mordhau/Engine.ini:/etc/mordhau/Engine.ini"
-        
+    --volume "/path/to/mordhau/Game.ini:/etc/mordhau/Game.ini" \
+    --volume "/path/to/mordhau/Engine.ini:/etc/mordhau/Engine.ini" \
+
 If you have a graphics card, I think this will give the server access:
 
-    --device /dev/dri:/dev/dri
+    --device /dev/dri:/dev/dri \
 
 ## Status
 
@@ -54,3 +54,7 @@ If you have a graphics card, I think this will give the server access:
         --entrypoint quakestat \
         bwstitt/mordhau \
         -a2s "$IP_OR_FQDN"
+
+## TODO
+
+Use https://github.com/kelseyhightower/confd instead of sed to generate config from environment variables

@@ -32,4 +32,4 @@ fi
 # TODO: option to run validate_mordhau.txt instead
 
 s6-setuidgid steam \
-    steamcmd.sh +runscript /etc/mordhau/update_mordhau.txt
+    steamcmd.sh +runscript /etc/mordhau/validate_mordhau.txt
