@@ -12,16 +12,20 @@ ENGINE_INI="${ENGINE_INI:-/etc/mordhau/Engine.ini}"
 # copy the game ini so that we can replace passwords
 # tmp should be a tmpfs so this won't touch disk
 cp "$GAME_INI" /tmp/Game.ini
+cp "$ENGINE_INI" /tmp/Engine.ini
 
 GAME_INI=/tmp/Game.ini
+ENGINE_INI=/tmp/Engine.ini
 
 chmod 600 "$GAME_INI"
+chmod 600 "$ENGINE_INI"
+
+chown steam:steam "$GAME_INI"
+chown steam:steam "$ENGINE_INI"
 
 # everything else is safe to include in a config on disk
 sed -i 's/${{SERVER_PASSWORD}}/'"${SERVER_PASSWORD:-}"'/' "$GAME_INI"
 sed -i 's/${{ADMIN_PASSWORD}}/'"${ADMIN_PASSWORD:-}"'/' "$GAME_INI"
-
-chown steam:steam /tmp/Game.ini
 
 # print the config (but without printing any passwords)
 echo
