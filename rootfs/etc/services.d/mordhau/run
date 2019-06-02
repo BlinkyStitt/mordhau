@@ -7,10 +7,14 @@ export HOME=/home/steam
 cd "$HOME"
 
 GAME_INI="${GAME_INI:-/etc/mordhau/Game.ini}"
+[ -e "$GAME_INI" ]
+
 ENGINE_INI="${ENGINE_INI:-/etc/mordhau/Engine.ini}"
+[ -e "$ENGINE_INI" ]
 
 # copy the game ini so that we can replace passwords
 # tmp should be a tmpfs so this won't touch disk
+# when the server starts, it also writes a bunch of settings out to the ini. we could disable that, but its nice to see what is running
 cp "$GAME_INI" /tmp/Game.ini
 cp "$ENGINE_INI" /tmp/Engine.ini
 
@@ -38,13 +42,20 @@ echo "ENGINE_INI: $ENGINE_INI"
 echo
 cat "$ENGINE_INI"
 
+cmd_array=(
+    MordhauServer.sh
+    "-Port=${PORT:-7777}"
+    "-QueryPort=${QUERY_PORT:-27015}"
+    "-BeaconPort=${BEACON_PORT:-15000}"
+    "-GAMEINI=$GAME_INI"
+    "-ENGINEINI=$ENGINE_INI"
+)
+
+if [ -n "${MULTIHOME}" ]; then
+    cmd_array+=(
+        "-MULTIHOME=$MULTIHOME"
+    )
+fi
+
 echo "Starting Mordhau Server..."
-exec s6-setuidgid steam \
-    MordhauServer.sh \
-    -Port="${PORT:-7777}" \
-    -QueryPort="${QUERY_PORT:-27015}" \
-    -BeaconPort="${BEACON_PORT:-15000}" \
-    -GAMEINI="$GAME_INI" \
-    -ENGINEINI="$ENGINE_INI" \
-    "$@" \
-;
+exec s6-setuidgid steam "${cmd_array[@]}"

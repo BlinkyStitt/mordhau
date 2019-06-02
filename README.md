@@ -48,6 +48,10 @@ If you have a graphics card, I think this will give the server access:
 
     --device /dev/dri:/dev/dri \
 
+If you need to connect to the server from both the LAN and WAN networks, you'll need to set the [MULTIHOME](http://wiki.unrealadmin.org/FAQ:UT2003#What_IP_address_should_I_use_for_the_-multihome_option_.3F) environment variable:
+
+    --env MULTIHOME=DOCKER.HOST.LAN.IP
+
 ## Status
 
     docker run --rm -it \
