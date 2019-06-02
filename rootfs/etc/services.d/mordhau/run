@@ -53,9 +53,10 @@ cmd_array=(
 
 if [ -n "${MULTIHOME}" ]; then
     cmd_array+=(
-        "-MULTIHOME=$MULTIHOME"
+        "-multihome=$MULTIHOME"
     )
 fi
 
 echo "Starting Mordhau Server..."
+set -x
 exec s6-setuidgid steam "${cmd_array[@]}"
