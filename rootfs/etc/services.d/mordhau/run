@@ -24,8 +24,8 @@ chown steam:steam "$GAME_INI"
 chown steam:steam "$ENGINE_INI"
 
 # everything else is safe to include in a config on disk
-sed -i 's/${{SERVER_PASSWORD}}/'"${SERVER_PASSWORD:-}"'/' "$GAME_INI"
-sed -i 's/${{ADMIN_PASSWORD}}/'"${ADMIN_PASSWORD:-}"'/' "$GAME_INI"
+sed -i 's/${SERVER_PASSWORD}/'"${SERVER_PASSWORD:-}"'/' "$GAME_INI"
+sed -i 's/${ADMIN_PASSWORD}/'"${ADMIN_PASSWORD:-}"'/' "$GAME_INI"
 
 # print the config (but without printing any passwords)
 echo
