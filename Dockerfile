@@ -27,6 +27,11 @@ RUN { set -eux; \
     rm -rf /tmp/* /var/lib/apt/lists/*; \
 }
 
+# if fix-attrs or cont-init fail, stop by sending a termination signal to the supervision tree
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS 2
+# How long (in milliseconds) s6 should wait services before sending a TERM signal
+ENV S6_SERVICES_GRACETIME 20000
+
 # install dependencies
 RUN { set -eux; \
     \
